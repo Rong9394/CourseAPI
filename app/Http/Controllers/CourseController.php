@@ -9,7 +9,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use App\Http\Services\CourseService;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
+use App\OpenApi\Parameters\InsertUpdateCourseParameters;
 
+#[OpenApi\PathItem]
 class CourseController extends Controller
 {
 
@@ -18,7 +20,7 @@ class CourseController extends Controller
      *
      * @return JsonResponse course listing and 200 on success
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['Course'], method: 'get')]
     public function index(): JsonResponse
     {
         return response()->json(['courses' => (new CourseService)->getAllCourses()], 200);
@@ -30,7 +32,7 @@ class CourseController extends Controller
      * @param Course id of the target course
      * @return JsonResponse course and 200 on success
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['Course'], method: 'get')]
     public function show(string $course): JsonResponse|Response
     {
         $result = (new CourseService)->findCourseById($course);
@@ -43,7 +45,8 @@ class CourseController extends Controller
      * @param StoreCourseRequest request with title, description, price_in_cents_usd
      * @return JsonResponse course on success, 404 or not found, 422 on invalid request data
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['Course'], method: 'post')]
+    #[OpenApi\Parameters(factory: InsertUpdateCourseParameters::class)]
     public function store(StoreCourseRequest $request): JsonResponse
     {
         $course = (new CourseService)->storeCourse($request->validated());
@@ -56,7 +59,8 @@ class CourseController extends Controller
      * @param UpdateCourseRequest request with title, description, price_in_cents_usd
      * @return JsonResponse course on success, 404 or not found, 422 on invalid request data
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['Course'], method: 'post')]
+    #[OpenApi\Parameters(factory: InsertUpdateCourseParameters::class)]
     public function update(UpdateCourseRequest $request, string $course): JsonResponse|Response
     {
         $result = (new CourseService)->updateCourse($course, $request->validated());
@@ -70,7 +74,7 @@ class CourseController extends Controller
      * @param Course id of target course
      * @return Response 204 on success, 404 on not found
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['Course'], method: 'delete')]
     public function destroy(string $course): Response
     {
         $code = (new CourseService)->deleteCourse($course);

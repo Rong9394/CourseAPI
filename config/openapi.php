@@ -23,12 +23,12 @@ return [
 
             'tags' => [
 
-                // [
-                //    'name' => 'user',
-                //    'description' => 'Application users',
-                // ],
-
+                [
+                   'name' => 'Course',
+                   'description' => 'Endpoints that interact with course resource',
+                ],
             ],
+        
 
             'security' => [
                 // GoldSpecDigital\ObjectOrientedOAS\Objects\SecurityRequirement::create()->securityScheme('JWT'),
